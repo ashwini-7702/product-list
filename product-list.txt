@@ -1,0 +1,87 @@
+// Sample product data (you can load data from an API or database)
+const products = [
+    { id: 1, title: 'Product 1', description: 'Description for Product 1', price: 29.99, category: 'electronics' },
+    { id: 2, title: 'Product 2', description: 'Description for Product 2', price: 19.99, category: 'clothing' },
+    // Add more product data
+];
+
+// Pagination variables
+const productsPerPage = 6;
+let currentPage = 1;
+
+// Filter and sort variables
+let selectedCategory = 'all';
+let selectedSort = 'low-to-high';
+
+// Function to display products
+function displayProducts() {
+    const productList = document.getElementById('product-list');
+    productList.innerHTML = '';
+
+    // Filter products based on category
+    const filteredProducts = (selectedCategory === 'all') ? products : products.filter(product => product.category === selectedCategory);
+
+    // Sort products based on selected sort order
+    filteredProducts.sort((a, b) => {
+        if (selectedSort === 'low-to-high') {
+            return a.price - b.price;
+        } else {
+            return b.price - a.price;
+        }
+    });
+
+    const startIndex = (currentPage - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+
+    for (let i = startIndex; i < endIndex && i < filteredProducts.length; i++) {
+        const product = filteredProducts[i];
+        const productElement = document.createElement('div');
+        productElement.classList.add('product');
+        productElement.innerHTML = `
+            <img src="product-image.jpg" alt="${product.title}">
+            <h2>${product.title}</h2>
+            <p>${product.description}</p>
+            <p>Price: $${product.price}</p>
+        `;
+        productList.appendChild(productElement);
+    }
+}
+
+// Function to generate pagination buttons
+function generatePaginationButtons() {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
+    const totalPages = Math.ceil(products.filter(product => selectedCategory === 'all' || product.category === selectedCategory).length / productsPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.classList.add('pagination-button');
+        button.textContent = i;
+        button.addEventListener('click', () => {
+            currentPage = i;
+            displayProducts();
+            generatePaginationButtons();
+        });
+        pagination.appendChild(button);
+    }
+}
+
+// Event listeners for category selection and sort order
+document.getElementById('category-select').addEventListener('change', (event) => {
+    selectedCategory = event.target.value;
+    currentPage = 1;
+    displayProducts();
+    generatePaginationButtons();
+});
+
+document.getElementById('price-sort').addEventListener('change', (event) => {
+    selectedSort = event.target.value;
+    currentPage = 1;
+    displayProducts();
+    generatePaginationButtons();
+});
+
+// Initial page load
+displayProducts();
+generatePaginationButtons();

@@ -1,0 +1,28 @@
+/* Add your CSS styling here for the header, product list, and pagination. */
+
+/* Example styles for the product list and pagination */
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.product {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    width: 300px;
+    text-align: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+}
